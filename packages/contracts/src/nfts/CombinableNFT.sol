@@ -53,4 +53,23 @@ contract CombinableNFT is ERC721URIStorage, Ownable {
         require(_exists(tokenId), "Token does not exist");
         return _baseAttributes[tokenId];
     }
+
+     function mintCombineNFT(uint256[] memory tokenIds) public returns (uint256) {
+        BaseAttributes memory combinedAttribute = _baseAttributes[tokenIds[0]];
+        for (uint256 i = 1; i < tokenIds.length; i++) {
+          BaseAttributes memory currentNFT = _baseAttributes[tokenIds[i]];
+          combinedAttribute.atk += currentNFT.atk;
+          combinedAttribute.def += currentNFT.def;
+          combinedAttribute.hp += currentNFT.hp;
+          combinedAttribute.mp += currentNFT.mp;
+          combinedAttribute.spd += currentNFT.spd;
+          combinedAttribute.amtr += currentNFT.amtr;
+          combinedAttribute.dama += currentNFT.dama;
+        }
+
+        uint256 tokenId = totalSupply + 1;
+        _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, string(abi.encodePacked("ipfs://Qm", bytes32(bytes20(blockhash(block.number - 1)))))); // use IPFS data for token URI
+        return tokenId;
+     }
 }

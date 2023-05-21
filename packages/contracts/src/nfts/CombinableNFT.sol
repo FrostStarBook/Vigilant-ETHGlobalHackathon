@@ -2,10 +2,11 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract CombinableNFT is ERC721URIStorage, Ownable {
+contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpgradeable{
   uint256 public totalSupply;
 
   struct BaseAttributes {
@@ -31,12 +32,16 @@ contract CombinableNFT is ERC721URIStorage, Ownable {
     uint256 dama
   );
 
-  constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+   function initialize() initializer public {
+        __ERC721_init("MyNFT", "MNFT");
+        __ERC721URIStorage_init();
+        __Ownable_init();
+    }
 
-  function mint() public onlyOwner {
+  function mint(address to, string memory tokenURI) public onlyOwner {
     uint256 tokenId = totalSupply + 1;
-    _safeMint(msg.sender, tokenId);
-    _setTokenURI(tokenId, string(abi.encodePacked("ipfs://Qm", bytes32(bytes20(blockhash(block.number - 1)))))); // use IPFS data for token URI
+    _safeMint(to, tokenId);
+    _setTokenURI(tokenId, tokenURI);
 
     BaseAttributes memory attributes;
     uint256 randomIndex = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, tokenId))) % 7;
@@ -75,7 +80,7 @@ contract CombinableNFT is ERC721URIStorage, Ownable {
     return _baseAttributes[tokenId];
   }
 
-  function mintCombineNFT(uint256[] memory tokenIds) public returns (uint256) {
+  function mintCombineNFT(uint256[] memory tokenIds,address to, string memory tokenURI) public returns (uint256) {
     BaseAttributes memory combinedAttribute = _baseAttributes[tokenIds[0]];
     for (uint256 i = 1; i < tokenIds.length; i++) {
       BaseAttributes memory currentNFT = _baseAttributes[tokenIds[i]];
@@ -89,8 +94,8 @@ contract CombinableNFT is ERC721URIStorage, Ownable {
     }
 
     uint256 tokenId = totalSupply + 1;
-    _safeMint(msg.sender, tokenId);
-    _setTokenURI(tokenId, string(abi.encodePacked("ipfs://Qm", bytes32(bytes20(blockhash(block.number - 1)))))); // use IPFS data for token URI
+    _safeMint(to, tokenId);
+    _setTokenURI(tokenId, tokenURI);
     emit NFTMinted(
       tokenId,
       combinedAttribute.atk,

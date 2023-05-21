@@ -20,6 +20,12 @@ export class Game extends GameBase {
             bottomLeft,
             sideLength: this.chunkSideLength,
             };
-        this.nextChunk = this.fromChunk;  
+        this.nextChunk = this.fromChunk;
+
+        Laya.stage.on(Laya.Event.MOUSE_DOWN, this, this.mouseDown);
+    }
+
+    mouseDown(e: Laya.Event): void {
+        this.bg.startDrag();
     }
 }

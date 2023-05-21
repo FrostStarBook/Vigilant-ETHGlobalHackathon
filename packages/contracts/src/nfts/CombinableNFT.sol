@@ -40,22 +40,22 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     uint256 dama
   );
 
-  function mint(address to, string memory description, string memory images) public {
+  function mint(address to, string memory description, string memory images, string memory mintType) public {
     uint256 tokenId = totalSupply + 1;
 
     BaseAttributes memory attributes;
-    uint256 randomIndex = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, tokenId))) % 7;
-    if (randomIndex == 0) {
+
+    if (keccak256(bytes(mintType)) == keccak256(bytes("atk"))) {
       attributes.atk = 1;
-    } else if (randomIndex == 1) {
+    } else if (keccak256(bytes(mintType)) == keccak256(bytes("def"))) {
       attributes.def = 1;
-    } else if (randomIndex == 2) {
+    } else if (keccak256(bytes(mintType)) == keccak256(bytes("hp"))) {
       attributes.hp = 1;
-    } else if (randomIndex == 3) {
+    } else if (keccak256(bytes(mintType)) == keccak256(bytes("mp"))) {
       attributes.mp = 1;
-    } else if (randomIndex == 4) {
+    } else if (keccak256(bytes(mintType)) == keccak256(bytes("spd"))) {
       attributes.spd = 1;
-    } else if (randomIndex == 5) {
+    } else if (keccak256(bytes(mintType)) == keccak256(bytes("amtr"))) {
       attributes.amtr = 1;
     } else {
       attributes.dama = 1;
@@ -103,6 +103,7 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     }
 
     uint256 tokenId = totalSupply + 1;
+    _baseAttributes[tokenId] = combinedAttribute;
     _safeMint(to, tokenId);
     _setTokenURI(tokenId, tokenURI(tokenId, description, images));
     emit NFTMinted(

@@ -59,7 +59,8 @@ export class Game extends GameBase {
             script.SetDir(HeroDir.Right);
         }
 
-        Laya.Tween.to(this.char, {x : movePoint.x}, spx * 1000, Laya.Ease.linearIn, Laya.Handler.create(this, this.onMoveXFinishEvent.bind(this), [movePoint.y]));
+        Laya.Tween.to(this.char, {x : movePoint.x}, spx * 1000, Laya.Ease.linearIn, 
+            Laya.Handler.create(this, this.onMoveXFinishEvent.bind(this), [movePoint.y]));
     }
 
     onMoveXFinishEvent(args:number){
@@ -71,5 +72,12 @@ export class Game extends GameBase {
         } else {
             script.SetDir(HeroDir.Down);
         }
+        const spy = Math.abs(y - this.char.y) / this.speed;
+        Laya.Tween.to(this.char, {y:y}, spy * 1000, Laya.Ease.linearIn, Laya.Handler.create(this, this.onMoveYFinishEvent.bind(this)));
+    }
+
+    onMoveYFinishEvent(args:number){
+        let script = this.char.getComponent(Laya.Script) as hero;
+        script.SetDir(HeroDir.Stand);
     }
 }

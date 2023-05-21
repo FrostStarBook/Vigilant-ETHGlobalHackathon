@@ -1,5 +1,7 @@
 import { GameBase } from "./Game.generated";
 import { HeroDir, MoveLenthLimit, Rectangle, TerrianType } from "../common/world";
+import { perlin } from '../common/perlin'; 
+import { hero } from "./heroStript";
 const { regClass, property } = Laya;
 
 @regClass()
@@ -24,6 +26,11 @@ export class Game extends GameBase {
         this.nextChunk = this.fromChunk;
 
         Laya.stage.on(Laya.Event.MOUSE_DOWN, this, this.mouseDown);
+        Laya.stage.on(Laya.Event.CLICK, this, this.onMouseClick);
+        
+        for (let index = 0; index < 100 * 100; index++) {
+            this.CreateMap();
+        }
     }
 
     mouseDown(e: Laya.Event): void {
@@ -79,5 +86,9 @@ export class Game extends GameBase {
     onMoveYFinishEvent(args:number){
         let script = this.char.getComponent(Laya.Script) as hero;
         script.SetDir(HeroDir.Stand);
+    }
+
+    CreateMap() {
+        const p = perlin(this.nextChunk.bottomLeft.x, this.nextChunk.bottomLeft.y, 7240, 1024) * 10;
     }
 }

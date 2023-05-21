@@ -59,6 +59,17 @@ export class Game extends GameBase {
             script.SetDir(HeroDir.Right);
         }
 
-        // TODO: Set move event
+        Laya.Tween.to(this.char, {x : movePoint.x}, spx * 1000, Laya.Ease.linearIn, Laya.Handler.create(this, this.onMoveXFinishEvent.bind(this), [movePoint.y]));
+    }
+
+    onMoveXFinishEvent(args:number){
+        const y = args;
+        let script = this.char.getComponent(Laya.Script) as hero;
+    
+        if(this.char.y > y) {
+            script.SetDir(HeroDir.Up);
+        } else {
+            script.SetDir(HeroDir.Down);
+        }
     }
 }

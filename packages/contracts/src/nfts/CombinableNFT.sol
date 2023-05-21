@@ -5,9 +5,17 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
-contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpgradeable{
+contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpgradeable {
   uint256 public totalSupply;
+
+  function __construct() public initializer {
+    __Ownable_init();
+    __ERC721_init("BaseNFT", "BNFT");
+    __ERC721URIStorage_init();
+  }
 
   struct BaseAttributes {
     uint256 atk; // attack
@@ -32,16 +40,8 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     uint256 dama
   );
 
-   function initialize() initializer public {
-        __ERC721_init("MyNFT", "MNFT");
-        __ERC721URIStorage_init();
-        __Ownable_init();
-    }
-
-  function mint(address to, string memory tokenURI) public onlyOwner {
+  function mint(address to, string memory description, string memory images) public {
     uint256 tokenId = totalSupply + 1;
-    _safeMint(to, tokenId);
-    _setTokenURI(tokenId, tokenURI);
 
     BaseAttributes memory attributes;
     uint256 randomIndex = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, tokenId))) % 7;
@@ -62,7 +62,11 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     }
 
     _baseAttributes[tokenId] = attributes;
+    _safeMint(to, tokenId);
+    _setTokenURI(tokenId, tokenURI(tokenId, description, images));
+
     totalSupply++;
+
     emit NFTMinted(
       tokenId,
       attributes.atk,
@@ -80,7 +84,12 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     return _baseAttributes[tokenId];
   }
 
-  function mintCombineNFT(uint256[] memory tokenIds,address to, string memory tokenURI) public returns (uint256) {
+  function mintCombineNFT(
+    uint256[] memory tokenIds,
+    address to,
+    string memory description,
+    string memory images
+  ) public returns (uint256) {
     BaseAttributes memory combinedAttribute = _baseAttributes[tokenIds[0]];
     for (uint256 i = 1; i < tokenIds.length; i++) {
       BaseAttributes memory currentNFT = _baseAttributes[tokenIds[i]];
@@ -95,7 +104,7 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
 
     uint256 tokenId = totalSupply + 1;
     _safeMint(to, tokenId);
-    _setTokenURI(tokenId, tokenURI);
+    _setTokenURI(tokenId, tokenURI(tokenId, description, images));
     emit NFTMinted(
       tokenId,
       combinedAttribute.atk,
@@ -107,5 +116,57 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
       combinedAttribute.dama
     );
     return tokenId;
+  }
+
+  function tokenURI(
+    uint256 tokenId,
+    string memory description,
+    string memory images
+  ) public view returns (string memory) {
+    require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+    BaseAttributes memory attributes = _baseAttributes[tokenId];
+
+    string memory json = string(
+      abi.encodePacked(
+        "{",
+        '"name": "Vagrant Duel Base NFT #',
+        Strings.toString(tokenId),
+        '",',
+        '"description": "',
+        description,
+        '",',
+        '"attributes": [',
+        '{ "trait_type": "atk", "value": ',
+        Strings.toString(attributes.atk),
+        " },",
+        '{ "trait_type": "def", "value": ',
+        Strings.toString(attributes.def),
+        " },",
+        '{ "trait_type": "hp", "value": ',
+        Strings.toString(attributes.hp),
+        " },",
+        '{ "trait_type": "mp", "value": ',
+        Strings.toString(attributes.mp),
+        " },",
+        '{ "trait_type": "spd", "value": ',
+        Strings.toString(attributes.spd),
+        " },",
+        '{ "trait_type": "amtr", "value": ',
+        Strings.toString(attributes.amtr),
+        " },",
+        '{ "trait_type": "dama", "value": ',
+        Strings.toString(attributes.dama),
+        " }",
+        "],",
+        '"image": "',
+        images,
+        '",',
+        '"background_color": "FFFFFF"',
+        "}"
+      )
+    );
+
+    return string(abi.encodePacked("data:application/json;base64,", Base64.encode(bytes(json))));
   }
 }

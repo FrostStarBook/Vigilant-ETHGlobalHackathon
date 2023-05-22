@@ -16,10 +16,8 @@ contract PostDeploy is Script {
 
     // ------------------ EXAMPLES ------------------
 
-    // Call increment on the world via the registered function selector
-    uint32 newValue = IWorld(worldAddress).increment();
-    console.log("Increment via IWorld:", newValue);
-
+ 
+     
     IWorld world = IWorld(worldAddress);
     console.log("world address:", worldAddress);
 
@@ -29,7 +27,7 @@ contract PostDeploy is Script {
     int256 denom = 1024;
     uint256 precision = 10;
     uint256 stepLimit = 4;
-
+    
     MapComponent.set(world,width,height,seed, denom,precision,stepLimit);
 
     vm.stopBroadcast();

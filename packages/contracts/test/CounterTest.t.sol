@@ -6,6 +6,7 @@ import { MudV2Test } from "@latticexyz/std-contracts/src/test/MudV2Test.t.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
+/*
 import { Counter, CounterTableId } from "../src/codegen/Tables.sol";
 
 contract CounterTest is MudV2Test {
@@ -36,3 +37,4 @@ contract CounterTest is MudV2Test {
     assertEq(counter, 2);
   }
 }
+*/

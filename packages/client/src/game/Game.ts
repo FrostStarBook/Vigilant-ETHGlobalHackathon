@@ -1,5 +1,6 @@
 import { BLOCK_SIZE, HeroDir, PlayerActionEvent, Rectangle, TerrianType } from "../common/world";
-import {perlin} from '../common/perlin';
+import {perlin} from '../common/perlin'; 
+import { Hero } from "./Hero";
 import { GameConfigType, defaultGameConfig,PlayerInfoType, PlayerStateType, PlayerPositionType } from "../common/config";
 import { setup } from "../mud/setup";
 import { defineSystem, Has, getComponentValueStrict,getComponentValue,runQuery,UpdateType } from "@latticexyz/recs";
@@ -158,6 +159,22 @@ export class Game extends Laya.Script {
             let player = res.create();
             player.pos(x,y);
             this.bg.addChild(player);
+  
+            let script = player.getComponents(Laya.Script)[1] as Hero;
+            if(entity == playerEntity){
+                script.touchFlag = true;
+                const deltaX = WorldWidth/2-x;
+                const deltaY = WorldHeight/2-y;
+                console.log(x,y);
+                console.log(deltaX+Laya.Browser.width/2,deltaY+Laya.Browser.height/2);
+                 
+
+                this.bg.pos(deltaX+Laya.Browser.width/2,deltaY+Laya.Browser.height/2);
+            }
+            script.SetState(state);
+            script.Entity = entity;
+            script.stepLimit = StepLimit;
+            this.playerImageMap.set(entity,player);
         } );
     }
 
@@ -346,6 +363,52 @@ export class Game extends Laya.Script {
     CreateMap(BlockSize:number){
         const p = perlin(this.nextChunk.bottomLeft.x,this.nextChunk.bottomLeft.y,7240, 1024)*10;
         let terrianType = this.terrianTypeFromPerlin(p);
+       
+        this.bg.graphics.drawRect(this.nextChunk.bottomLeft.x,this.nextChunk.bottomLeft.y,BlockSize,BlockSize,this.terrianColorFromType(terrianType),'000000',0);
+       // this.bg.graphics.drawImage(texture,this.nextChunk.bottomLeft.x+980/2,540/2-this.nextChunk.bottomLeft.y,16,16,this.terrianColorFromType(terrianType));
+ 
+        this.nextChunk =  this.findNextChunk(this.nextChunk,BlockSize);
+    }
+    isValidExploreTarget(chunkLocation: Rectangle): boolean {
+        const { bottomLeft, sideLength } = chunkLocation;
+        const xCenter = bottomLeft.x + sideLength / 2;
+        const yCenter = bottomLeft.y  + sideLength / 2;
+        const xMinAbs = Math.abs(xCenter) - sideLength / 2;
+        const yMinAbs = Math.abs(yCenter) - sideLength / 2;
+        const squareDist = xMinAbs ** 2 + yMinAbs ** 2;
+        // should be inbounds, and unexplored
+        return  squareDist < 32768 ** 2;
+    }
+    findNextChunk(chunk: Rectangle,BlockSize:number): Rectangle {
+        const homeX = this.fromChunk.bottomLeft.x;
+        const homeY = this.fromChunk.bottomLeft.y;
+        const currX = chunk.bottomLeft.x;
+        const currY = chunk.bottomLeft.y;
+    
+        const nextBottomLeft = { x: currX, y: currY };
+      
+        if (currX === homeX && currY === homeY) {
+          nextBottomLeft.y = homeY + BlockSize;
+        } else if (currY - currX > homeY - homeX && currY + currX >= homeX + homeY) {
+          if (currY + currX === homeX + homeY) {
+            // break the circle
+            nextBottomLeft.y = currY + BlockSize;
+          } else {
+            nextBottomLeft.x = currX + BlockSize;
+          }
+        } else if (currX + currY > homeX + homeY && currY - currX <= homeY - homeX) {
+          nextBottomLeft.y = currY - BlockSize;
+        } else if (currX + currY <= homeX + homeY && currY - currX < homeY - homeX) {
+          nextBottomLeft.x = currX -BlockSize;
+        } else {
+          // if (currX + currY < homeX + homeY && currY - currX >= homeY - homeX)
+          nextBottomLeft.y = currY + BlockSize;
+        }
+    
+        return {
+          bottomLeft: nextBottomLeft,
+          sideLength: BlockSize,
+        };
     }
     public terrianTypeFromPerlin(perlin: number): TerrianType {
         if (perlin < TerrianType.Water) {
@@ -362,6 +425,29 @@ export class Game extends Laya.Script {
             return TerrianType.Water;
         }
   }
+  public terrianColorFromType(type: TerrianType): string {
+    let result = "ffffff";
+    switch (type) {
+        case TerrianType.Water:
+            result = "3300FF";
+            break;
+        case TerrianType.Glass:
+            result = "00CC00";
+            break;
+        case TerrianType.Soil:
+            result = "FF9933";
+            break;
+        case TerrianType.Fire:
+            result = "FF0000";
+            break;
+        case TerrianType.Ice:
+            result = "CCCCCC";
+            break;
+        default:
+            break;
+    }
+    return result;
+    }
     popMessage(message:string){
         Laya.Scene.open("resources/prefab/P_Message.lh", false, {"text":message}); 
     }

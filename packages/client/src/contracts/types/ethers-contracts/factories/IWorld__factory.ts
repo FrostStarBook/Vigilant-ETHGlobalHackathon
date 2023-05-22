@@ -297,6 +297,56 @@ const _abi = [
     type: "event",
   },
   {
+    inputs: [],
+    name: "Explore",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "GetExploreResult",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "int256",
+        name: "x",
+        type: "int256",
+      },
+      {
+        internalType: "int256",
+        name: "y",
+        type: "int256",
+      },
+    ],
+    name: "JoinGame",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "int256",
+        name: "x",
+        type: "int256",
+      },
+      {
+        internalType: "int256",
+        name: "y",
+        type: "int256",
+      },
+    ],
+    name: "Move",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "bytes16",
@@ -635,19 +685,6 @@ const _abi = [
     ],
     name: "grantAccess",
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "increment",
-    outputs: [
-      {
-        internalType: "uint32",
-        name: "",
-        type: "uint32",
-      },
-    ],
     stateMutability: "nonpayable",
     type: "function",
   },

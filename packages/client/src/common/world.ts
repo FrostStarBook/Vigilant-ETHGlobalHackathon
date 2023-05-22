@@ -32,3 +32,5 @@ export enum PlayerActionEvent{
 }
 
 export const BLOCK_SIZE = 64;
+
+  

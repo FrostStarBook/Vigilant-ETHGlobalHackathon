@@ -1,4 +1,4 @@
-export interface GameConfigType {
+ export interface GameConfigType {
    
     WidthBlock: number;
     

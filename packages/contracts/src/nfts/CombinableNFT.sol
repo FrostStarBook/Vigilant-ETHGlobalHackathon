@@ -60,25 +60,25 @@ contract CombinableNFT is
 
      if (keccak256(bytes(mintType)) == keccak256(bytes("atk"))) {
       attributes.atk = 1;
-      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/atk.png";
+      images = "https://bafybeifwe2xkzzbm4ck4rtd3cfm3q6ramzbuyemjfkienem36s22jrcxzy.ipfs.nftstorage.link/";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("def"))) {
       attributes.def = 1;
-      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/def.png";
+      images = "https://bafybeif2es67pmfbrwbgnzs72bk5ut5giadhetjetqw4d7pnwyt2436jzm.ipfs.nftstorage.link/";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("hp"))) {
       attributes.hp = 1;
-      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/hp.png";
+      images = "https://bafybeict26fwlgkt7arhmw5mwwjujqzxy4d5e6mrynztogmkmt6la7utfu.ipfs.nftstorage.link/";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("mp"))) {
       attributes.mp = 1;
-      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/mp.png";
+      images = "https://bafybeihbd7tmefhymcun7qs2guy5chooeiaqjmucib76kz4ct6qapok7mq.ipfs.nftstorage.link/";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("spd"))) {
       attributes.spd = 1;
-      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/spd.png";
+      images = "https://bafybeifb44ejrc65sd7ebrf624poyyzan2xchkyvoz4erhrzl2plm7j53y.ipfs.nftstorage.link/";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("amtr"))) {
       attributes.amtr = 1;
-      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/amtr.png";
+      images = "https://bafybeien76xaw3kv67lp4uazqgvvvql3wp7pkeq2tl64q7xukteyjxjvt4.ipfs.nftstorage.link/";
     } else {
       attributes.dama = 1;
-      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/dama.png";
+      images = "https://bafybeig7b6vs4wf7eyvxjq5yfteozyg2xshh4mh6bzi5ohcgimwsms7rj4.ipfs.nftstorage.link/";
     }
     _baseAttributes[tokenId] = attributes;
     _safeMint(to, tokenId);

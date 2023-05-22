@@ -52,32 +52,34 @@ contract CombinableNFT is
     uint256 dama
   );
 
-  function mint(
-    address to,
-    string memory description,
-    string memory images,
-    string memory mintType
-  ) external {
+  function mint(address to, string memory description, string memory mintType) external {
     uint256 tokenId = totalSupply + 1;
 
     BaseAttributes memory attributes;
+    string memory images;
 
     if (keccak256(bytes(mintType)) == keccak256(bytes("atk"))) {
       attributes.atk = 1;
+      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/atk.png";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("def"))) {
       attributes.def = 1;
+      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/def.png";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("hp"))) {
       attributes.hp = 1;
+      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/hp.png";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("mp"))) {
       attributes.mp = 1;
+      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/mp.png";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("spd"))) {
       attributes.spd = 1;
+      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/spd.png";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("amtr"))) {
       attributes.amtr = 1;
+      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/amtr.png";
     } else {
       attributes.dama = 1;
+      images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/dama.png";
     }
-
     _baseAttributes[tokenId] = attributes;
     _safeMint(to, tokenId);
     _setTokenURI(tokenId, tokenURI(tokenId, description, images));

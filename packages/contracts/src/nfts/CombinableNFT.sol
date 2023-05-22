@@ -18,10 +18,6 @@ contract CombinableNFT is
 {
   uint256 public totalSupply;
 
-  constructor() {
-    _disableInitializers();
-  }
-
   function initialize() public initializer {
     __ERC721_init("BaseNFT", "BNFT");
     __ERC721URIStorage_init();
@@ -52,13 +48,17 @@ contract CombinableNFT is
     uint256 dama
   );
 
-  function mint(address to, string memory description, string memory mintType) external {
+  function mint(
+    address to,
+    string memory description,
+    string memory mintType
+  ) external onlyOwner{
     uint256 tokenId = totalSupply + 1;
 
     BaseAttributes memory attributes;
-    string memory images;
+     string memory images;
 
-    if (keccak256(bytes(mintType)) == keccak256(bytes("atk"))) {
+     if (keccak256(bytes(mintType)) == keccak256(bytes("atk"))) {
       attributes.atk = 1;
       images = "https://gateway.pinata.cloud/ipfs/QmXh6RrCZ7WrSkCSTkpTfPaaC4gENSwCUTqC4iBkey7BvN/atk.png";
     } else if (keccak256(bytes(mintType)) == keccak256(bytes("def"))) {
@@ -108,7 +108,7 @@ contract CombinableNFT is
     address to,
     string memory description,
     string memory images
-  ) external returns (uint256) {
+  ) external onlyOwner returns (uint256) {
     BaseAttributes memory combinedAttribute = _baseAttributes[tokenIds[0]];
     for (uint256 i = 1; i < tokenIds.length; i++) {
       BaseAttributes memory currentNFT = _baseAttributes[tokenIds[i]];

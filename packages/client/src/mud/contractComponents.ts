@@ -58,7 +58,7 @@ export function defineContractComponents(world: World) {
         {
           updateTimestamp: RecsType.BigInt,
           state: RecsType.Number,
-          energy: RecsType.Number,
+          energy: RecsType.BigInt,
         },
         {
           metadata: {
@@ -79,6 +79,10 @@ export function defineContractComponents(world: World) {
           denom: RecsType.BigInt,
           precision: RecsType.BigInt,
           stepLimit: RecsType.BigInt,
+          energyMax: RecsType.BigInt,
+          moveCost: RecsType.BigInt,
+          exploreTime: RecsType.BigInt,
+          restoreEnergy: RecsType.BigInt,
         },
         {
           metadata: {

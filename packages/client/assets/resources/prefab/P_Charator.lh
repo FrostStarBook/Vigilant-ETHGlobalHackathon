@@ -1,0 +1,241 @@
+{
+  "_$ver": 1,
+  "_$id": "6szejiei",
+  "_$type": "Image",
+  "name": "node",
+  "width": 64,
+  "height": 64,
+  "mouseEnabled": true,
+  "color": "#99eaac",
+  "_$comp": [
+    {
+      "_$type": "d74e9e79-e34c-4133-b956-f8ad3a7e6738",
+      "scriptPath": "../src/ui/GameMenu.ts",
+      "move_menu": {
+        "_$ref": "sdrj6pv3"
+      },
+      "explore_menu": {
+        "_$ref": "sz87hemo"
+      },
+      "gain_menu": {
+        "_$ref": "lpfcm1qo"
+      },
+      "menu": {
+        "_$ref": "v0hdbvea"
+      }
+    },
+    {
+      "_$type": "2607523e-7736-46fe-b429-d2cd5c04a7e0",
+      "scriptPath": "../src/game/Hero.ts",
+      "move_up": {
+        "_$ref": "jyws6qkf"
+      },
+      "move_down": {
+        "_$ref": "achzggqd"
+      },
+      "move_right": {
+        "_$ref": "1322idx6"
+      },
+      "move_left": {
+        "_$ref": "okafpzkm"
+      },
+      "bg": {
+        "_$ref": "ndjzmwep"
+      },
+      "stand": {
+        "_$ref": "3xmr3qlv"
+      },
+      "menu": {
+        "_$ref": "v0hdbvea"
+      },
+      "state": {
+        "_$ref": "402hw51i"
+      }
+    }
+  ],
+  "_$child": [
+    {
+      "_$id": "ndjzmwep",
+      "_$type": "Image",
+      "name": "bg",
+      "x": -928,
+      "y": -508,
+      "width": 1920,
+      "height": 1080,
+      "alpha": 0.6,
+      "mouseEnabled": true,
+      "centerX": 0,
+      "centerY": 0,
+      "color": "#1900a4"
+    },
+    {
+      "_$id": "3xmr3qlv",
+      "_$type": "Image",
+      "name": "stand",
+      "width": 64,
+      "height": 64,
+      "skin": "res://e8b0c177-f8b3-4773-bd29-55cbaa8e68d8",
+      "color": "#ffffff"
+    },
+    {
+      "_$id": "okafpzkm",
+      "_$var": true,
+      "_$type": "Animation",
+      "name": "move_left",
+      "width": 64,
+      "height": 64,
+      "visible": false,
+      "images": [
+        "res://99688747-d56e-436e-9f0a-34a87f44d1ec",
+        "res://77c0437b-5d97-4203-a8c3-26b4e7bb1816",
+        "res://8b31f980-694b-4abd-b58d-736167175ba3"
+      ],
+      "interval": 100,
+      "autoPlay": true,
+      "index": 1
+    },
+    {
+      "_$id": "1322idx6",
+      "_$var": true,
+      "_$type": "Animation",
+      "name": "move_right",
+      "width": 64,
+      "height": 64,
+      "visible": false,
+      "images": [
+        "res://6c109e6b-c708-48e0-b3d1-ce59f84a2918",
+        "res://37f38374-4530-4c8f-b486-f3cf6b60ec37",
+        "res://8b31f980-694b-4abd-b58d-736167175ba3"
+      ],
+      "interval": 100,
+      "autoPlay": true,
+      "index": 0
+    },
+    {
+      "_$id": "jyws6qkf",
+      "_$var": true,
+      "_$type": "Animation",
+      "name": "move_up",
+      "width": 64,
+      "height": 64,
+      "visible": false,
+      "images": [
+        "res://39df8c28-ce03-4a0f-8819-2a1024890045",
+        "res://07e41874-0760-40a7-bdc8-702a9b68b56c",
+        "res://d2f83ab0-f9fe-4f68-805d-551c05e9e2e9"
+      ],
+      "interval": 100,
+      "autoPlay": true,
+      "index": 0
+    },
+    {
+      "_$id": "achzggqd",
+      "_$var": true,
+      "_$type": "Animation",
+      "name": "move_down",
+      "width": 64,
+      "height": 64,
+      "images": [
+        "res://e8b0c177-f8b3-4773-bd29-55cbaa8e68d8",
+        "res://b61a4db0-07f2-4417-ad97-c62f0835520a",
+        "res://8f47356d-bf76-4486-b0b7-56cc916db79e"
+      ],
+      "interval": 100,
+      "autoPlay": true,
+      "index": 1
+    },
+    {
+      "_$id": "v0hdbvea",
+      "_$type": "Image",
+      "name": "menu",
+      "x": 82,
+      "y": -218,
+      "width": 200,
+      "height": 200,
+      "mouseEnabled": true,
+      "centerX": 150,
+      "centerY": -150,
+      "skin": "res://c09d9db6-8db9-4263-9562-cbd3156a0133",
+      "sizeGrid": "8,8,8,8,0",
+      "color": "#ffffff",
+      "_$child": [
+        {
+          "_$id": "6i84spwf",
+          "_$type": "VBox",
+          "name": "VBox",
+          "y": 40,
+          "width": 200,
+          "height": 160,
+          "centerX": 0,
+          "centerY": 20,
+          "space": 20,
+          "align": "center",
+          "_$child": [
+            {
+              "_$id": "sdrj6pv3",
+              "_$type": "Text",
+              "name": "Move",
+              "x": 50,
+              "width": 100,
+              "height": 32,
+              "mouseEnabled": true,
+              "text": "Move",
+              "font": "res://33f5743a-b0f4-4fdf-8a10-2a6ba42fddf3",
+              "fontSize": 28,
+              "color": "#FFFFFF",
+              "align": "center",
+              "valign": "middle",
+              "leading": 0
+            },
+            {
+              "_$id": "sz87hemo",
+              "_$type": "Text",
+              "name": "Explore",
+              "x": 25,
+              "y": 52,
+              "width": 150,
+              "height": 32,
+              "mouseEnabled": true,
+              "text": "explore",
+              "font": "res://33f5743a-b0f4-4fdf-8a10-2a6ba42fddf3",
+              "fontSize": 28,
+              "color": "#FFFFFF",
+              "align": "center",
+              "valign": "middle",
+              "leading": 0
+            },
+            {
+              "_$id": "lpfcm1qo",
+              "_$type": "Text",
+              "name": "Gain",
+              "x": 50,
+              "y": 104,
+              "width": 100,
+              "height": 30,
+              "mouseEnabled": true,
+              "text": "Gain",
+              "font": "res://33f5743a-b0f4-4fdf-8a10-2a6ba42fddf3",
+              "fontSize": 28,
+              "color": "#FFFFFF",
+              "align": "center",
+              "valign": "middle",
+              "leading": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_$id": "402hw51i",
+      "_$type": "Image",
+      "name": "state",
+      "y": -20,
+      "width": 64,
+      "height": 20,
+      "centerX": 0,
+      "centerY": -42,
+      "skin": "res://00000000-0000-0000-0001-000000000000",
+      "color": "#ffffff"
+    }
+  ]
+}

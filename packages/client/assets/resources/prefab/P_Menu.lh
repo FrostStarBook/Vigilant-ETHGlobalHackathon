@@ -1,0 +1,111 @@
+{
+  "_$ver": 1,
+  "_$id": "gu2bngnj",
+  "_$type": "Dialog",
+  "name": "Dialog",
+  "x": 1060,
+  "y": 240,
+  "width": 200,
+  "height": 200,
+  "mouseEnabled": true,
+  "centerX": 200,
+  "centerY": -200,
+  "isModal": true,
+  "isPopupCenter": false,
+  "_$comp": [
+    {
+      "_$type": "d74e9e79-e34c-4133-b956-f8ad3a7e6738",
+      "scriptPath": "../src/ui/GameMenu.ts",
+      "move_menu": {
+        "_$ref": "gns5aupp"
+      },
+      "explore_menu": {
+        "_$ref": "wdu3j93b"
+      },
+      "rest_menu": {
+        "_$ref": "sxa6wfp9"
+      }
+    }
+  ],
+  "_$child": [
+    {
+      "_$id": "3jw9tgho",
+      "_$type": "Image",
+      "name": "Image",
+      "y": 50,
+      "width": 200,
+      "height": 200,
+      "centerX": 0,
+      "centerY": 50,
+      "skin": "res://c09d9db6-8db9-4263-9562-cbd3156a0133",
+      "sizeGrid": "8,8,8,8,0",
+      "color": "#ffffff",
+      "_$child": [
+        {
+          "_$id": "s2wditp6",
+          "_$type": "VBox",
+          "name": "VBox",
+          "y": 40,
+          "width": 200,
+          "height": 160,
+          "centerX": 0,
+          "centerY": 20,
+          "space": 20,
+          "align": "center",
+          "_$child": [
+            {
+              "_$id": "gns5aupp",
+              "_$type": "Text",
+              "name": "Move",
+              "x": 50,
+              "width": 100,
+              "height": 32,
+              "mouseEnabled": true,
+              "text": "Move",
+              "font": "res://33f5743a-b0f4-4fdf-8a10-2a6ba42fddf3",
+              "fontSize": 28,
+              "color": "#FFFFFF",
+              "align": "center",
+              "valign": "middle",
+              "leading": 0
+            },
+            {
+              "_$id": "wdu3j93b",
+              "_$type": "Text",
+              "name": "Explore",
+              "x": 25,
+              "y": 52,
+              "width": 150,
+              "height": 32,
+              "mouseEnabled": true,
+              "text": "explore",
+              "font": "res://33f5743a-b0f4-4fdf-8a10-2a6ba42fddf3",
+              "fontSize": 28,
+              "color": "#FFFFFF",
+              "align": "center",
+              "valign": "middle",
+              "leading": 0
+            },
+            {
+              "_$id": "sxa6wfp9",
+              "_$type": "Text",
+              "name": "Rest",
+              "x": 50,
+              "y": 104,
+              "width": 100,
+              "height": 30,
+              "mouseEnabled": true,
+              "text": "Rest",
+              "font": "res://33f5743a-b0f4-4fdf-8a10-2a6ba42fddf3",
+              "fontSize": 28,
+              "color": "#FFFFFF",
+              "align": "center",
+              "valign": "middle",
+              "leading": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

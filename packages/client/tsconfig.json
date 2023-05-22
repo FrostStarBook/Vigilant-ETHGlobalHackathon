@@ -6,7 +6,7 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true, // 需要开启
     "strict": true,
     "strictNullChecks": false,
     "noEmitHelpers": true,

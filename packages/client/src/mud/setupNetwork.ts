@@ -23,6 +23,7 @@ export async function setupNetwork() {
     worldAbi: IWorld__factory.abi,
   });
 
+   
   // Request drip from faucet
   const signer = result.network.signer.get();
   if (networkConfig.faucetServiceUrl && signer) {

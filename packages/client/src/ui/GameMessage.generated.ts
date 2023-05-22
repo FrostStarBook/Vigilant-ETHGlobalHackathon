@@ -7,3 +7,4 @@
 export class GameMessageBase extends Laya.Dialog {
     public Label: Laya.Label;
 }
+

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
  
-import { PositionComponentTableId,PlayerComponentTableId } from "../codegen/Tables.sol";
+import { PlayerComponentTableId } from "../codegen/Tables.sol";
 import { query, QueryFragment, QueryType } from "@latticexyz/world/src/modules/keysintable/query.sol";
 import { Perlin } from "@latticexyz/noise/contracts/Perlin.sol";
 library LibMap {
@@ -13,13 +13,8 @@ library LibMap {
   }
   function getMapPerlin(int32 x,int32 y)internal view returns (uint256){
         Perlin.noise(x,y,0,12,1);
+        
   }
-   function obstructions(int32 x,int32 y) internal view returns (bool) {
-    QueryFragment[] memory fragments = new QueryFragment[](2);
-    fragments[0] = QueryFragment(QueryType.HasValue, PositionComponentTableId, abi.encode(x,y));
-    fragments[1] = QueryFragment(QueryType.Has, PlayerComponentTableId, new bytes(0));
  
-    return query(fragments).length == 0;
-  }
   
 }

@@ -7,7 +7,7 @@ library LibGame {
         return bytes32(uint256(uint160(addr)));
     }
 
-    function positionToEntityKey(uint256 x, uint256 y)internal pure returns (bytes32) {
+    function positionToEntityKey(int256 x, int256 y)internal pure returns (bytes32) {
         return keccak256(abi.encode(x, y));
     }
 }

@@ -5,16 +5,28 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
-contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpgradeable {
+contract CombinableNFT is
+  Initializable,
+  UUPSUpgradeable,
+  ERC721Upgradeable,
+  ERC721URIStorageUpgradeable,
+  OwnableUpgradeable
+{
   uint256 public totalSupply;
 
-  function __construct() public initializer {
-    __Ownable_init();
+  constructor() {
+    _disableInitializers();
+  }
+
+  function initialize() public initializer {
     __ERC721_init("BaseNFT", "BNFT");
     __ERC721URIStorage_init();
+    __Ownable_init();
+    __UUPSUpgradeable_init();
   }
 
   struct BaseAttributes {
@@ -40,7 +52,12 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     uint256 dama
   );
 
-  function mint(address to, string memory description, string memory images, string memory mintType) public {
+  function mint(
+    address to,
+    string memory description,
+    string memory images,
+    string memory mintType
+  ) external {
     uint256 tokenId = totalSupply + 1;
 
     BaseAttributes memory attributes;
@@ -89,7 +106,7 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     address to,
     string memory description,
     string memory images
-  ) public returns (uint256) {
+  ) external returns (uint256) {
     BaseAttributes memory combinedAttribute = _baseAttributes[tokenIds[0]];
     for (uint256 i = 1; i < tokenIds.length; i++) {
       BaseAttributes memory currentNFT = _baseAttributes[tokenIds[i]];
@@ -123,7 +140,7 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     uint256 tokenId,
     string memory description,
     string memory images
-  ) public view returns (string memory) {
+  ) internal view returns (string memory) {
     require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
     BaseAttributes memory attributes = _baseAttributes[tokenId];
@@ -169,5 +186,17 @@ contract CombinableNFT is Initializable, ERC721URIStorageUpgradeable, OwnableUpg
     );
 
     return string(abi.encodePacked("data:application/json;base64,", Base64.encode(bytes(json))));
+  }
+
+  function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+
+  function _burn(uint256 id) internal override(ERC721Upgradeable, ERC721URIStorageUpgradeable) {
+    super._burn(id);
+  }
+
+  function tokenURI(
+    uint256 id
+  ) public view override(ERC721Upgradeable, ERC721URIStorageUpgradeable) returns (string memory) {
+    return super.tokenURI(id);
   }
 }

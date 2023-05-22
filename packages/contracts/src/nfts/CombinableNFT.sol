@@ -150,7 +150,7 @@ contract CombinableNFT is
     string memory json = string(
       abi.encodePacked(
         "{",
-        '"name": "Vagrant Duel Base NFT #',
+        '"name": "Vigilant Base NFT #',
         Strings.toString(tokenId),
         '",',
         '"description": "',

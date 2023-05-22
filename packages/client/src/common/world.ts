@@ -28,7 +28,7 @@ export enum PlayerActionEvent{
     Move = 'Move',
     CheckMove = 'CheckMove',
     Explore = 'Explore',
-    Rest = 'Rest',
+    Gain = 'Gain',
 }
 
-export const MoveLenthLimit = 4;
+export const BLOCK_SIZE = 64;

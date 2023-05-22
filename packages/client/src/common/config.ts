@@ -18,16 +18,23 @@ export interface GameConfigType {
  
     StepLimit: number;
 
+    EnergyMax:number;
+
+    MoveCost:number;
+
+    ExploreTime:number;
+
+    RestoreEnergy:number;
 };
 
 export enum PlayerStateType{
-    Move = 0,
-    Explore,
+    Exploring,
     Rest
 }
 
 export interface PlayerPositionType {
-    
+    id:string;
+
     x: number;
  
     y: number;
@@ -35,9 +42,7 @@ export interface PlayerPositionType {
  
 export interface PlayerInfoType {
    
-    pos: PlayerPositionType;
- 
-    state:number;
+    state:PlayerStateType;
 
     energy:number;
 
@@ -63,5 +68,13 @@ export const defaultGameConfig: GameConfigType = {
     Precision:10,
 
     StepLimit:4,
- 
+
+    EnergyMax:200,
+
+    MoveCost:10,
+
+    ExploreTime:6*60*60,
+
+    RestoreEnergy:10,
 };
+  

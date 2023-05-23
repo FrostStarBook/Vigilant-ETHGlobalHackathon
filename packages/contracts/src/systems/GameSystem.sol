@@ -2,13 +2,13 @@
 pragma solidity >=0.8.0;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { PlayerComponent,PlayerInfoComponent,ObstructionComponent,PositionComponent,MapComponent,TestComponent } from "../codegen/Tables.sol";
+import { PlayerComponent,PlayerInfoComponent,ObstructionComponent,PositionComponent,MapComponent,TestComponent,NFTComponent } from "../codegen/Tables.sol";
 import { LibGame } from "../libraries/libGame.sol";
 import { LibMap } from "../libraries/libMap.sol";
 import { PlayerState } from "../codegen/Types.sol";
 import { Perlin } from "../libraries/Perlin.sol";
 //import { Perlin } from "@latticexyz/noise/contracts/Perlin.sol";
-//import { CombinableNFT } from "../nfts/CombinableNFT.sol";
+import { CombinableNFT } from "../nfts/CombinableNFT.sol";
 
 //import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
@@ -64,54 +64,86 @@ contract GameSystem is System {
         PlayerInfoComponent.setEnergy(playerEntity,curEnergy-moveCost*dis);
         PlayerInfoComponent.setUpdateTimestamp(playerEntity,block.timestamp);
     }
-    function getAttribute(int256 x,int256 y,int256 seed,int256 denom , uint8 precision)internal returns (string memory){
-        int128 perlin =  Perlin.noise(x,y,seed,denom,precision)/(2*10**18);
+    function getAttribute(bytes32 playerEntity)internal returns (int64){
+        int256 blockSize = MapComponent.getBlockSize();
+        int256 x =  PositionComponent.getX(playerEntity)*blockSize;
+        int256 y =  PositionComponent.getY(playerEntity)*blockSize;
+        int256 seed =  MapComponent.getSeed();
+        int256 denom =  MapComponent.getDenom();
+        int128 perlin =  Perlin.noise(x,y,seed,denom,64)/(2*10**18);
+        if(perlin < 3){
+            return 3;
+        }else if(perlin < 4){
+            return 4;
+        }else if(perlin < 5){
+            return 5;
+        }else if(perlin < 6){
+            return 6;
+        }else if(perlin < 7){
+            return 7;
+        }
+        return 3;
+        /*
         if(perlin < 3){
             return "hp";
-        }else if(perlin < 4){
+         }else if(perlin < 4){
             return "atk";
-        }else if(perlin < 5){
+         }else if(perlin < 5){
             return "def";
-        }else if(perlin < 6){
+         }else if(perlin < 6){
             return "spd";
-        }else if(perlin < 7){
-            return "mp";
-        }
-        return "hp";
+         }else if(perlin < 7){
+           return "mp";
+         }
+           return "hp";
+           */
     }
     function Gain() public{
         bytes32 playerEntity = LibGame.addressToEntityKey(address(_msgSender()));
         bool ret = PlayerComponent.get(playerEntity);
         require(ret,"player not init!");
 
-        uint256 targetTime = PlayerInfoComponent.getUpdateTimestamp(playerEntity);
-        require(targetTime >= block.timestamp,"time limit!");
+        uint64 exploreBlock = PlayerInfoComponent.getExploreBlock(playerEntity);
+        uint64 limit = MapComponent.getExploreBlockLimit();
+        // require(exploreBlock >= block.number+limit,"block limit!");
 
-        uint256 exploreBlock = PlayerInfoComponent.getExploreBlock(playerEntity);
+        // if(exploreBlock > block.number - 256){
+        //  uint256 targetTime = MapComponent.getExploreTime()+block.timestamp;
+        //   PlayerInfoComponent.setExploreBlock(playerEntity,uint64(block.number+limit));
+        //    return;
+        //  }
 
-        if(exploreBlock < block.number - 256){
-
-            // uint256 targetTime = MapComponent.getExploreTime()+block.timestamp;
-            // PlayerInfoComponent.setState(playerEntity,PlayerState.Exploring);
-            //PlayerInfoComponent.setExploreBlock(playerEntity,block.number+20);
-            return;
+        uint128 rand =  uint128(uint256(blockhash(exploreBlock))%(2**128-1));
+        bool randRet = rand%2 == 0;
+        if(randRet){
+            int64 attr = getAttribute(playerEntity);
+            AddPlayerNFT(playerEntity,attr);
+            // CombinableNFT(address(this)).mint(msg.sender,LibGame.byte32ToString(attr));
         }
-
-        int256 x =  PositionComponent.getX(playerEntity)*64;
-        int256 y =  PositionComponent.getY(playerEntity)*64;
-        int256 seed =  MapComponent.getSeed();
-        int256 denom =  MapComponent.getDenom();
-        uint8 precision =  uint8(MapComponent.getPrecision());
-        string memory attr =  getAttribute(x, y, seed, denom, precision);
-
-
-        //string memory attr = getAttribute(x,y,seed,denom,precision);
-
-
 
         PlayerInfoComponent.setState(playerEntity,PlayerState.Rest);
         PlayerInfoComponent.setUpdateTimestamp(playerEntity,block.timestamp);
 
+    }
+    function AddPlayerNFT(bytes32 entity,int64 attr)internal{
+        if (attr == 3) {
+            int64 hp = NFTComponent.getHp(entity);
+            NFTComponent.setHp(entity,hp+1);
+        } else if (attr == 4) {
+            int64 atk = NFTComponent.getAtk(entity);
+            NFTComponent.setAtk(entity,atk+1);
+        }else if (attr == 5) {
+            int64 def = NFTComponent.getDef(entity);
+            NFTComponent.setDef(entity,def+1);
+        }
+        else if (attr == 6) {
+            int64 spd = NFTComponent.getSpd(entity);
+            NFTComponent.setSpd(entity,spd+1);
+        }
+        else if (attr == 7) {
+            int64 mp = NFTComponent.getMp(entity);
+            NFTComponent.setMp(entity,mp+1);
+        }
     }
     function Explore() public{
         bytes32 playerEntity = LibGame.addressToEntityKey(address(_msgSender()));
@@ -121,8 +153,10 @@ contract GameSystem is System {
         PlayerState state = PlayerInfoComponent.getState(playerEntity);
         require(state == PlayerState.Rest,"player state error!");
 
+        uint64 exploreBlock =  uint64(block.number)+MapComponent.getExploreBlockLimit();
+
         PlayerInfoComponent.setState(playerEntity,PlayerState.Exploring);
-        // PlayerInfoComponent.setExploreBlock(playerEntity,block.number+20);
+        PlayerInfoComponent.setExploreBlock(playerEntity,exploreBlock);
     }
     function checkDis(bytes32 entity,int256 x,int256 y)internal returns(uint256) {
         int256 fromX =  PositionComponent.getX(entity);

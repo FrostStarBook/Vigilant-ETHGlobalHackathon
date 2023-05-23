@@ -26,7 +26,6 @@ contract PostDeploy is Script {
     int256 height = 100;
     int256 seed = 1009;
     int256 denom = 1024;
-    uint256 precision = 64;
     uint256 stepLimit = 4;
     uint256 energyMax = 200;
     uint256 moveCost = 1;
@@ -35,12 +34,6 @@ contract PostDeploy is Script {
 
 
     MapComponent.set(world,blockSize,width,height,seed,denom,stepLimit,energyMax,moveCost,exploreBlockLimit,restoreEnergy);
-    uint256 moveCost = 10;
-    uint256 exploreTime = 20;
-    uint256 restoreEnergy = 10;
-
-
-    MapComponent.set(world,width,height,seed, denom,precision,stepLimit,energyMax,moveCost,exploreTime,restoreEnergy);
 
     vm.stopBroadcast();
   }

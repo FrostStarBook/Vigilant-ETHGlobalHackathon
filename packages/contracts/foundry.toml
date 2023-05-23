@@ -8,6 +8,11 @@ verbosity = 1
 src = "src"
 test = "test"
 out = "out"
+
+gas_price = 0
+initial_balance = '0xffffffffffffffffffffffff'
+block_base_fee_per_gas = 0
+
 allow_paths = ["../../node_modules", "../../../../packages"]
 extra_output_files = [
   "abi",

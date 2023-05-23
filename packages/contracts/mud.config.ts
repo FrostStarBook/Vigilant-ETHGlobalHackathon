@@ -8,6 +8,18 @@ export default mudConfig({
   tables: {
     TestComponent:"int128",
     ObstructionComponent:"bool",
+    NFTComponent: {
+      dataStruct: false,
+      schema: {
+        hp:'int64',
+        atk:"int64",
+        def:"int64",
+        mp:"int64",
+        dama:"int64",
+        spd:"int64",
+      },
+    },
+
     PlayerComponent: "bool",
     PositionComponent: {
       dataStruct: false,
@@ -29,16 +41,16 @@ export default mudConfig({
       keySchema: {},
       dataStruct: false,
       schema: {
+        blockSize:'int256',
         width: "int256",
         height: "int256",
         seed:"int256",
         denom:"int256",
-        precision:"uint256",
         stepLimit:'uint256',
         energyMax:"uint256",
         moveCost:"uint256",
-        exploreTime:"uint256",
-        restoreEnergy:"uint256",
+        exploreBlockLimit:"uint64",
+        restoreEnergy:"uint64",
       },
     },
   },

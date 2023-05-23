@@ -26,10 +26,11 @@ bytes32 constant PlayerInfoComponentTableId = _tableId;
 library PlayerInfoComponent {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](3);
-    _schema[0] = SchemaType.UINT256;
-    _schema[1] = SchemaType.UINT8;
-    _schema[2] = SchemaType.UINT256;
+    SchemaType[] memory _schema = new SchemaType[](4);
+    _schema[0] = SchemaType.UINT64;
+    _schema[1] = SchemaType.UINT256;
+    _schema[2] = SchemaType.UINT8;
+    _schema[3] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -43,10 +44,11 @@ library PlayerInfoComponent {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](3);
-    _fieldNames[0] = "updateTimestamp";
-    _fieldNames[1] = "state";
-    _fieldNames[2] = "energy";
+    string[] memory _fieldNames = new string[](4);
+    _fieldNames[0] = "exploreBlock";
+    _fieldNames[1] = "updateTimestamp";
+    _fieldNames[2] = "state";
+    _fieldNames[3] = "energy";
     return ("PlayerInfoComponent", _fieldNames);
   }
 
@@ -72,12 +74,46 @@ library PlayerInfoComponent {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
+  /** Get exploreBlock */
+  function getExploreBlock(bytes32 key) internal view returns (uint64 exploreBlock) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
+    return (uint64(Bytes.slice8(_blob, 0)));
+  }
+
+  /** Get exploreBlock (using the specified store) */
+  function getExploreBlock(IStore _store, bytes32 key) internal view returns (uint64 exploreBlock) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
+    return (uint64(Bytes.slice8(_blob, 0)));
+  }
+
+  /** Set exploreBlock */
+  function setExploreBlock(bytes32 key, uint64 exploreBlock) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((exploreBlock)));
+  }
+
+  /** Set exploreBlock (using the specified store) */
+  function setExploreBlock(IStore _store, bytes32 key, uint64 exploreBlock) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((exploreBlock)));
+  }
+
   /** Get updateTimestamp */
   function getUpdateTimestamp(bytes32 key) internal view returns (uint256 updateTimestamp) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -86,7 +122,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -95,7 +131,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((updateTimestamp)));
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((updateTimestamp)));
   }
 
   /** Set updateTimestamp (using the specified store) */
@@ -103,7 +139,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((updateTimestamp)));
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((updateTimestamp)));
   }
 
   /** Get state */
@@ -111,7 +147,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
     return PlayerState(uint8(Bytes.slice1(_blob, 0)));
   }
 
@@ -120,7 +156,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
     return PlayerState(uint8(Bytes.slice1(_blob, 0)));
   }
 
@@ -129,7 +165,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(state)));
+    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked(uint8(state)));
   }
 
   /** Set state (using the specified store) */
@@ -137,7 +173,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(state)));
+    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked(uint8(state)));
   }
 
   /** Get energy */
@@ -145,7 +181,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -154,7 +190,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -163,7 +199,7 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((energy)));
+    StoreSwitch.setField(_tableId, _keyTuple, 3, abi.encodePacked((energy)));
   }
 
   /** Set energy (using the specified store) */
@@ -171,11 +207,13 @@ library PlayerInfoComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((energy)));
+    _store.setField(_tableId, _keyTuple, 3, abi.encodePacked((energy)));
   }
 
   /** Get the full data */
-  function get(bytes32 key) internal view returns (uint256 updateTimestamp, PlayerState state, uint256 energy) {
+  function get(
+    bytes32 key
+  ) internal view returns (uint64 exploreBlock, uint256 updateTimestamp, PlayerState state, uint256 energy) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -187,7 +225,7 @@ library PlayerInfoComponent {
   function get(
     IStore _store,
     bytes32 key
-  ) internal view returns (uint256 updateTimestamp, PlayerState state, uint256 energy) {
+  ) internal view returns (uint64 exploreBlock, uint256 updateTimestamp, PlayerState state, uint256 energy) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -196,8 +234,8 @@ library PlayerInfoComponent {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, uint256 updateTimestamp, PlayerState state, uint256 energy) internal {
-    bytes memory _data = encode(updateTimestamp, state, energy);
+  function set(bytes32 key, uint64 exploreBlock, uint256 updateTimestamp, PlayerState state, uint256 energy) internal {
+    bytes memory _data = encode(exploreBlock, updateTimestamp, state, energy);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -206,8 +244,15 @@ library PlayerInfoComponent {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, uint256 updateTimestamp, PlayerState state, uint256 energy) internal {
-    bytes memory _data = encode(updateTimestamp, state, energy);
+  function set(
+    IStore _store,
+    bytes32 key,
+    uint64 exploreBlock,
+    uint256 updateTimestamp,
+    PlayerState state,
+    uint256 energy
+  ) internal {
+    bytes memory _data = encode(exploreBlock, updateTimestamp, state, energy);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -218,17 +263,24 @@ library PlayerInfoComponent {
   /** Decode the tightly packed blob using this table's schema */
   function decode(
     bytes memory _blob
-  ) internal pure returns (uint256 updateTimestamp, PlayerState state, uint256 energy) {
-    updateTimestamp = (uint256(Bytes.slice32(_blob, 0)));
+  ) internal pure returns (uint64 exploreBlock, uint256 updateTimestamp, PlayerState state, uint256 energy) {
+    exploreBlock = (uint64(Bytes.slice8(_blob, 0)));
 
-    state = PlayerState(uint8(Bytes.slice1(_blob, 32)));
+    updateTimestamp = (uint256(Bytes.slice32(_blob, 8)));
 
-    energy = (uint256(Bytes.slice32(_blob, 33)));
+    state = PlayerState(uint8(Bytes.slice1(_blob, 40)));
+
+    energy = (uint256(Bytes.slice32(_blob, 41)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint256 updateTimestamp, PlayerState state, uint256 energy) internal view returns (bytes memory) {
-    return abi.encodePacked(updateTimestamp, state, energy);
+  function encode(
+    uint64 exploreBlock,
+    uint256 updateTimestamp,
+    PlayerState state,
+    uint256 energy
+  ) internal view returns (bytes memory) {
+    return abi.encodePacked(exploreBlock, updateTimestamp, state, energy);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

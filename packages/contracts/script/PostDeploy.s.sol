@@ -25,12 +25,12 @@ contract PostDeploy is Script {
     int256 height = 100;
     int256 seed = 1009;
     int256 denom = 1024;
-    uint256 precision = 10;
+    uint256 precision = 64;
     uint256 stepLimit = 4;
 
     uint256 energyMax = 200;
     uint256 moveCost = 10;
-    uint256 exploreTime = 6*60*60;
+    uint256 exploreTime = 20;
     uint256 restoreEnergy = 10;
 
 

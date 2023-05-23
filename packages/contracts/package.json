@@ -30,7 +30,10 @@
     "@latticexyz/world": "2.0.0-alpha.1.179",
     "@latticexyz/noise": "2.0.0-alpha.1.179",
     "@latticexyz/config": "2.0.0-alpha.1.179",
-    "ethers": "^5.7.2"
+    "ethers": "^5.7.2",
+    "@openzeppelin/contracts":"^4.8.3",
+    "@openzeppelin/contracts-upgradeable":"^4.8.3",
+    "abdk-libraries-solidity": "^3.0.0"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^10.2.0",

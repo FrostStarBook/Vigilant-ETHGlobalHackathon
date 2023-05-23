@@ -6,6 +6,7 @@ export default mudConfig({
     PlayerState: ["Exploring", "Rest"],
   },
   tables: {
+    TestComponent:"int128",
     ObstructionComponent:"bool",
     PlayerComponent: "bool",
     PositionComponent: {
@@ -18,6 +19,7 @@ export default mudConfig({
     PlayerInfoComponent: {
       dataStruct: false,
       schema: {
+        exploreBlock:'uint64',
         updateTimestamp:"uint256",
         state:"PlayerState",
         energy:"uint256",

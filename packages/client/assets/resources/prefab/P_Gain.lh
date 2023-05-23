@@ -1,0 +1,59 @@
+{
+  "_$ver": 1,
+  "_$id": "gu2bngnj",
+  "_$runtime": "res://79956845-1ee1-4ea6-9dde-835484c40c98",
+  "_$type": "Dialog",
+  "name": "Dialog",
+  "width": 800,
+  "height": 400,
+  "mouseEnabled": true,
+  "isModal": true,
+  "_$child": [
+    {
+      "_$id": "3jw9tgho",
+      "_$type": "Image",
+      "name": "Image",
+      "width": 800,
+      "height": 400,
+      "centerX": 0,
+      "centerY": 0,
+      "skin": "res://c09d9db6-8db9-4263-9562-cbd3156a0133",
+      "sizeGrid": "8,8,8,8,0",
+      "color": "#ffffff",
+      "_$child": [
+        {
+          "_$id": "7lorhols",
+          "_$var": true,
+          "_$type": "Image",
+          "name": "icon",
+          "x": 300,
+          "y": 100,
+          "width": 200,
+          "height": 200,
+          "centerX": 0,
+          "centerY": 0,
+          "color": "#ffffff"
+        },
+        {
+          "_$id": "m5os4kwf",
+          "_$type": "Label",
+          "name": "Label",
+          "x": 340,
+          "y": 348,
+          "width": 120,
+          "height": 32,
+          "bottom": 20,
+          "centerX": 0,
+          "text": "GET!",
+          "font": "res://d542e490-8976-476e-910d-c53657a9c7eb",
+          "fontSize": 32,
+          "color": "#FFFFFF",
+          "align": "center",
+          "valign": "middle",
+          "leading": 0,
+          "padding": "0,0,0,0"
+        }
+      ]
+    }
+  ]
+}

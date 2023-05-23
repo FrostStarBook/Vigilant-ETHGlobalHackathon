@@ -70,10 +70,15 @@ export class Hero extends Laya.Script {
       
     }
     SetState(playerState:PlayerStateType){
+        console.log('------SetState  ',playerState);
         if(playerState == PlayerStateType.Exploring){
-            this.state.color = "FF0000";
+            Laya.loader.load("resources/ui/player_state_0.png").then(() => {
+                this.state.texture  = Laya.loader.getRes("resources/ui/player_state_0.png");
+            });
         }else{
-            this.state.color = "FFFFFF";
+            Laya.loader.load("resources/ui/player_state_1.png").then(() => {
+                this.state.texture  = Laya.loader.getRes("resources/ui/player_state_1.png");
+            });
         }
          
     }

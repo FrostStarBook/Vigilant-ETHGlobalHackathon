@@ -18,7 +18,7 @@ import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
 // Import user types
-import { PlayerStatus } from "./../Types.sol";
+import { PlayerState } from "./../Types.sol";
 
 bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("PlayerInfoCompon")));
 bytes32 constant PlayerInfoComponentTableId = _tableId;
@@ -29,7 +29,7 @@ library PlayerInfoComponent {
     SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.UINT256;
     _schema[1] = SchemaType.UINT8;
-    _schema[2] = SchemaType.INT32;
+    _schema[2] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -107,25 +107,25 @@ library PlayerInfoComponent {
   }
 
   /** Get state */
-  function getState(bytes32 key) internal view returns (PlayerStatus state) {
+  function getState(bytes32 key) internal view returns (PlayerState state) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
-    return PlayerStatus(uint8(Bytes.slice1(_blob, 0)));
+    return PlayerState(uint8(Bytes.slice1(_blob, 0)));
   }
 
   /** Get state (using the specified store) */
-  function getState(IStore _store, bytes32 key) internal view returns (PlayerStatus state) {
+  function getState(IStore _store, bytes32 key) internal view returns (PlayerState state) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
-    return PlayerStatus(uint8(Bytes.slice1(_blob, 0)));
+    return PlayerState(uint8(Bytes.slice1(_blob, 0)));
   }
 
   /** Set state */
-  function setState(bytes32 key, PlayerStatus state) internal {
+  function setState(bytes32 key, PlayerState state) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -133,7 +133,7 @@ library PlayerInfoComponent {
   }
 
   /** Set state (using the specified store) */
-  function setState(IStore _store, bytes32 key, PlayerStatus state) internal {
+  function setState(IStore _store, bytes32 key, PlayerState state) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -141,25 +141,25 @@ library PlayerInfoComponent {
   }
 
   /** Get energy */
-  function getEnergy(bytes32 key) internal view returns (int32 energy) {
+  function getEnergy(bytes32 key) internal view returns (uint256 energy) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Get energy (using the specified store) */
-  function getEnergy(IStore _store, bytes32 key) internal view returns (int32 energy) {
+  function getEnergy(IStore _store, bytes32 key) internal view returns (uint256 energy) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (uint256(Bytes.slice32(_blob, 0)));
   }
 
   /** Set energy */
-  function setEnergy(bytes32 key, int32 energy) internal {
+  function setEnergy(bytes32 key, uint256 energy) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -167,7 +167,7 @@ library PlayerInfoComponent {
   }
 
   /** Set energy (using the specified store) */
-  function setEnergy(IStore _store, bytes32 key, int32 energy) internal {
+  function setEnergy(IStore _store, bytes32 key, uint256 energy) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -175,7 +175,7 @@ library PlayerInfoComponent {
   }
 
   /** Get the full data */
-  function get(bytes32 key) internal view returns (uint256 updateTimestamp, PlayerStatus state, int32 energy) {
+  function get(bytes32 key) internal view returns (uint256 updateTimestamp, PlayerState state, uint256 energy) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -187,7 +187,7 @@ library PlayerInfoComponent {
   function get(
     IStore _store,
     bytes32 key
-  ) internal view returns (uint256 updateTimestamp, PlayerStatus state, int32 energy) {
+  ) internal view returns (uint256 updateTimestamp, PlayerState state, uint256 energy) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -196,7 +196,7 @@ library PlayerInfoComponent {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, uint256 updateTimestamp, PlayerStatus state, int32 energy) internal {
+  function set(bytes32 key, uint256 updateTimestamp, PlayerState state, uint256 energy) internal {
     bytes memory _data = encode(updateTimestamp, state, energy);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -206,7 +206,7 @@ library PlayerInfoComponent {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, uint256 updateTimestamp, PlayerStatus state, int32 energy) internal {
+  function set(IStore _store, bytes32 key, uint256 updateTimestamp, PlayerState state, uint256 energy) internal {
     bytes memory _data = encode(updateTimestamp, state, energy);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -218,16 +218,16 @@ library PlayerInfoComponent {
   /** Decode the tightly packed blob using this table's schema */
   function decode(
     bytes memory _blob
-  ) internal pure returns (uint256 updateTimestamp, PlayerStatus state, int32 energy) {
+  ) internal pure returns (uint256 updateTimestamp, PlayerState state, uint256 energy) {
     updateTimestamp = (uint256(Bytes.slice32(_blob, 0)));
 
-    state = PlayerStatus(uint8(Bytes.slice1(_blob, 32)));
+    state = PlayerState(uint8(Bytes.slice1(_blob, 32)));
 
-    energy = (int32(uint32(Bytes.slice4(_blob, 33))));
+    energy = (uint256(Bytes.slice32(_blob, 33)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint256 updateTimestamp, PlayerStatus state, int32 energy) internal view returns (bytes memory) {
+  function encode(uint256 updateTimestamp, PlayerState state, uint256 energy) internal view returns (bytes memory) {
     return abi.encodePacked(updateTimestamp, state, energy);
   }
 

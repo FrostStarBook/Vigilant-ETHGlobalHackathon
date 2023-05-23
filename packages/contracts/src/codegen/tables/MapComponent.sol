@@ -23,13 +23,17 @@ bytes32 constant MapComponentTableId = _tableId;
 library MapComponent {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](6);
+    SchemaType[] memory _schema = new SchemaType[](10);
     _schema[0] = SchemaType.INT256;
     _schema[1] = SchemaType.INT256;
     _schema[2] = SchemaType.INT256;
     _schema[3] = SchemaType.INT256;
     _schema[4] = SchemaType.UINT256;
     _schema[5] = SchemaType.UINT256;
+    _schema[6] = SchemaType.UINT256;
+    _schema[7] = SchemaType.UINT256;
+    _schema[8] = SchemaType.UINT256;
+    _schema[9] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -42,13 +46,17 @@ library MapComponent {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](6);
+    string[] memory _fieldNames = new string[](10);
     _fieldNames[0] = "width";
     _fieldNames[1] = "height";
     _fieldNames[2] = "seed";
     _fieldNames[3] = "denom";
     _fieldNames[4] = "precision";
     _fieldNames[5] = "stepLimit";
+    _fieldNames[6] = "energyMax";
+    _fieldNames[7] = "moveCost";
+    _fieldNames[8] = "exploreTime";
+    _fieldNames[9] = "restoreEnergy";
     return ("MapComponent", _fieldNames);
   }
 
@@ -254,11 +262,142 @@ library MapComponent {
     _store.setField(_tableId, _keyTuple, 5, abi.encodePacked((stepLimit)));
   }
 
+  /** Get energyMax */
+  function getEnergyMax() internal view returns (uint256 energyMax) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 6);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get energyMax (using the specified store) */
+  function getEnergyMax(IStore _store) internal view returns (uint256 energyMax) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 6);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set energyMax */
+  function setEnergyMax(uint256 energyMax) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setField(_tableId, _keyTuple, 6, abi.encodePacked((energyMax)));
+  }
+
+  /** Set energyMax (using the specified store) */
+  function setEnergyMax(IStore _store, uint256 energyMax) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    _store.setField(_tableId, _keyTuple, 6, abi.encodePacked((energyMax)));
+  }
+
+  /** Get moveCost */
+  function getMoveCost() internal view returns (uint256 moveCost) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 7);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get moveCost (using the specified store) */
+  function getMoveCost(IStore _store) internal view returns (uint256 moveCost) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 7);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set moveCost */
+  function setMoveCost(uint256 moveCost) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setField(_tableId, _keyTuple, 7, abi.encodePacked((moveCost)));
+  }
+
+  /** Set moveCost (using the specified store) */
+  function setMoveCost(IStore _store, uint256 moveCost) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    _store.setField(_tableId, _keyTuple, 7, abi.encodePacked((moveCost)));
+  }
+
+  /** Get exploreTime */
+  function getExploreTime() internal view returns (uint256 exploreTime) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 8);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get exploreTime (using the specified store) */
+  function getExploreTime(IStore _store) internal view returns (uint256 exploreTime) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 8);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set exploreTime */
+  function setExploreTime(uint256 exploreTime) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setField(_tableId, _keyTuple, 8, abi.encodePacked((exploreTime)));
+  }
+
+  /** Set exploreTime (using the specified store) */
+  function setExploreTime(IStore _store, uint256 exploreTime) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    _store.setField(_tableId, _keyTuple, 8, abi.encodePacked((exploreTime)));
+  }
+
+  /** Get restoreEnergy */
+  function getRestoreEnergy() internal view returns (uint256 restoreEnergy) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 9);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get restoreEnergy (using the specified store) */
+  function getRestoreEnergy(IStore _store) internal view returns (uint256 restoreEnergy) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 9);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set restoreEnergy */
+  function setRestoreEnergy(uint256 restoreEnergy) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setField(_tableId, _keyTuple, 9, abi.encodePacked((restoreEnergy)));
+  }
+
+  /** Set restoreEnergy (using the specified store) */
+  function setRestoreEnergy(IStore _store, uint256 restoreEnergy) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    _store.setField(_tableId, _keyTuple, 9, abi.encodePacked((restoreEnergy)));
+  }
+
   /** Get the full data */
   function get()
-    internal
-    view
-    returns (int256 width, int256 height, int256 seed, int256 denom, uint256 precision, uint256 stepLimit)
+  internal
+  view
+  returns (
+    int256 width,
+    int256 height,
+    int256 seed,
+    int256 denom,
+    uint256 precision,
+    uint256 stepLimit,
+    uint256 energyMax,
+    uint256 moveCost,
+    uint256 exploreTime,
+    uint256 restoreEnergy
+  )
   {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -270,9 +409,20 @@ library MapComponent {
   function get(
     IStore _store
   )
-    internal
-    view
-    returns (int256 width, int256 height, int256 seed, int256 denom, uint256 precision, uint256 stepLimit)
+  internal
+  view
+  returns (
+    int256 width,
+    int256 height,
+    int256 seed,
+    int256 denom,
+    uint256 precision,
+    uint256 stepLimit,
+    uint256 energyMax,
+    uint256 moveCost,
+    uint256 exploreTime,
+    uint256 restoreEnergy
+  )
   {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -281,8 +431,30 @@ library MapComponent {
   }
 
   /** Set the full data using individual values */
-  function set(int256 width, int256 height, int256 seed, int256 denom, uint256 precision, uint256 stepLimit) internal {
-    bytes memory _data = encode(width, height, seed, denom, precision, stepLimit);
+  function set(
+    int256 width,
+    int256 height,
+    int256 seed,
+    int256 denom,
+    uint256 precision,
+    uint256 stepLimit,
+    uint256 energyMax,
+    uint256 moveCost,
+    uint256 exploreTime,
+    uint256 restoreEnergy
+  ) internal {
+    bytes memory _data = encode(
+      width,
+      height,
+      seed,
+      denom,
+      precision,
+      stepLimit,
+      energyMax,
+      moveCost,
+      exploreTime,
+      restoreEnergy
+    );
 
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -297,9 +469,24 @@ library MapComponent {
     int256 seed,
     int256 denom,
     uint256 precision,
-    uint256 stepLimit
+    uint256 stepLimit,
+    uint256 energyMax,
+    uint256 moveCost,
+    uint256 exploreTime,
+    uint256 restoreEnergy
   ) internal {
-    bytes memory _data = encode(width, height, seed, denom, precision, stepLimit);
+    bytes memory _data = encode(
+      width,
+      height,
+      seed,
+      denom,
+      precision,
+      stepLimit,
+      energyMax,
+      moveCost,
+      exploreTime,
+      restoreEnergy
+    );
 
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -310,9 +497,20 @@ library MapComponent {
   function decode(
     bytes memory _blob
   )
-    internal
-    pure
-    returns (int256 width, int256 height, int256 seed, int256 denom, uint256 precision, uint256 stepLimit)
+  internal
+  pure
+  returns (
+    int256 width,
+    int256 height,
+    int256 seed,
+    int256 denom,
+    uint256 precision,
+    uint256 stepLimit,
+    uint256 energyMax,
+    uint256 moveCost,
+    uint256 exploreTime,
+    uint256 restoreEnergy
+  )
   {
     width = (int256(uint256(Bytes.slice32(_blob, 0))));
 
@@ -325,6 +523,14 @@ library MapComponent {
     precision = (uint256(Bytes.slice32(_blob, 128)));
 
     stepLimit = (uint256(Bytes.slice32(_blob, 160)));
+
+    energyMax = (uint256(Bytes.slice32(_blob, 192)));
+
+    moveCost = (uint256(Bytes.slice32(_blob, 224)));
+
+    exploreTime = (uint256(Bytes.slice32(_blob, 256)));
+
+    restoreEnergy = (uint256(Bytes.slice32(_blob, 288)));
   }
 
   /** Tightly pack full data using this table's schema */
@@ -334,9 +540,25 @@ library MapComponent {
     int256 seed,
     int256 denom,
     uint256 precision,
-    uint256 stepLimit
+    uint256 stepLimit,
+    uint256 energyMax,
+    uint256 moveCost,
+    uint256 exploreTime,
+    uint256 restoreEnergy
   ) internal view returns (bytes memory) {
-    return abi.encodePacked(width, height, seed, denom, precision, stepLimit);
+    return
+    abi.encodePacked(
+      width,
+      height,
+      seed,
+      denom,
+      precision,
+      stepLimit,
+      energyMax,
+      moveCost,
+      exploreTime,
+      restoreEnergy
+    );
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

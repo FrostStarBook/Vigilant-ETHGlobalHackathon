@@ -8,7 +8,7 @@ interface IGameSystem {
 
   function Move(int256 x, int256 y) external;
 
-  function Rest() external;
+  function Gain() external;
 
   function Explore() external;
 }

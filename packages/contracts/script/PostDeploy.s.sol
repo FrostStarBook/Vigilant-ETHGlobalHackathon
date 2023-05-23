@@ -16,8 +16,8 @@ contract PostDeploy is Script {
 
     // ------------------ EXAMPLES ------------------
 
- 
-     
+
+
     IWorld world = IWorld(worldAddress);
     console.log("world address:", worldAddress);
 
@@ -27,8 +27,14 @@ contract PostDeploy is Script {
     int256 denom = 1024;
     uint256 precision = 10;
     uint256 stepLimit = 4;
-    
-    MapComponent.set(world,width,height,seed, denom,precision,stepLimit);
+
+    uint256 energyMax = 200;
+    uint256 moveCost = 10;
+    uint256 exploreTime = 6*60*60;
+    uint256 restoreEnergy = 10;
+
+
+    MapComponent.set(world,width,height,seed, denom,precision,stepLimit,energyMax,moveCost,exploreTime,restoreEnergy);
 
     vm.stopBroadcast();
   }

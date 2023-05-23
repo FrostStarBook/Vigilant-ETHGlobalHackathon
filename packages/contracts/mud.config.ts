@@ -3,7 +3,7 @@ import { resolveTableId } from "@latticexyz/config";
 
 export default mudConfig({
   enums: {
-    PlayerStatus: ["Move", "Explore", "Rest"],
+    PlayerState: ["Exploring", "Rest"],
   },
   tables: {
     ObstructionComponent:"bool",
@@ -19,8 +19,8 @@ export default mudConfig({
       dataStruct: false,
       schema: {
         updateTimestamp:"uint256",
-        state:"PlayerStatus",
-        energy:"int32",
+        state:"PlayerState",
+        energy:"uint256",
       },
     },
     MapComponent: {
@@ -33,6 +33,10 @@ export default mudConfig({
         denom:"int256",
         precision:"uint256",
         stepLimit:'uint256',
+        energyMax:"uint256",
+        moveCost:"uint256",
+        exploreTime:"uint256",
+        restoreEnergy:"uint256",
       },
     },
   },

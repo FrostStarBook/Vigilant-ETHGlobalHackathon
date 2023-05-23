@@ -1,4 +1,4 @@
-import { BLOCK_SIZE, HeroDir, PlayerActionEvent, Rectangle, TerrianType } from "../common/world";
+import { HeroDir, PlayerActionEvent, Rectangle, TerrianType } from "../common/world";
 import {perlin} from '../common/perlin'; 
 import { Hero } from "./Hero";
 import { GameConfigType, defaultGameConfig,PlayerInfoType, PlayerStateType, PlayerPositionType } from "../common/config";
@@ -31,8 +31,8 @@ export class Game extends Laya.Script {
     initFlag:boolean = true;
     onAwake() {
         this.updateTimestamp = Date.now();
-        this.loading.width = Laya.Browser.width;
-        this.loading.height = Laya.Browser.height;
+       // this.loading.width = Laya.Browser.width;
+       // this.loading.height = Laya.Browser.height;
         Laya.stage.on(Laya.Event.MOUSE_DOWN, this, this.mouseDown);
         Laya.stage.on(PlayerActionEvent.CheckMove, this, this.onCheckMoveEvent);
         Laya.stage.on(PlayerActionEvent.Explore, this, this.onExploreEvent);
@@ -40,7 +40,7 @@ export class Game extends Laya.Script {
         setup().then( async (result)=>{
             this.mud = result;
         const {
-            network: { playerEntityId,world },
+            network: { playerEntityId,world,playerEntity },
           }  = this.mud;
           console.log(this.mud);
          console.log('playerEntity  ',playerEntityId);
@@ -72,6 +72,36 @@ export class Game extends Laya.Script {
             this.updatePlayerInfo(entity);
           
           });
+           this.mud.components.NFTComponent.update$.subscribe((update) => {
+            this.updateTimestamp = Date.now();
+            const [nextValue, prevValue] = update.value;
+            console.log('NFTComponent--- ',update);
+            const entity = world.registerEntity({ id: update.entity });
+            if(playerEntity == entity && prevValue){
+                if(nextValue.hp > prevValue.hp){
+                    this.popGain('hp');
+                }else if(nextValue.dama > prevValue.dama){
+                    this.popGain('damap');
+                }else if(nextValue.def > prevValue.def){
+                    this.popGain('def');
+                }else if(nextValue.atk > prevValue.atk){
+                    this.popGain('atk');
+                }else if(nextValue.spd > prevValue.spd){
+                    this.popGain('spd');
+                }else if(nextValue.mp > prevValue.mp){
+                    this.popGain('mp');
+                }
+              
+            }
+           
+          });
+          this.mud.components.TestComponent.update$.subscribe((update) => {
+            this.updateTimestamp = Date.now();
+            const [nextValue, prevValue] = update.value;
+            console.log('TestComponent--- ',update);
+ 
+           
+          });
       } );
       // this.mud = await setup();
          
@@ -101,20 +131,23 @@ export class Game extends Laya.Script {
           }  = this.mud;
         const mapConfig = getComponentValue(MapComponent, singletonEntity);
 
-        const {width,height} = mapConfig;
-        
+        const {width,height,seed,denom,blockSize} = mapConfig;
+        const BlockSize = Number(blockSize);
         const WidthBlock = Number(width);
         const HeightBlock = Number(height);
-        const WorldWidth = WidthBlock*BLOCK_SIZE;
-        const WorldHeight = HeightBlock*BLOCK_SIZE;
+         
+        const Seed = Number(seed);
+        const Denom = Number(denom);
+        const WorldWidth = WidthBlock*BlockSize;
+        const WorldHeight = HeightBlock*BlockSize;
 
-        const bottomLeftX =WorldWidth/2-BLOCK_SIZE;
-        const bottomLeftY = WorldHeight/2-BLOCK_SIZE;
+        const bottomLeftX =WorldWidth/2-BlockSize;
+        const bottomLeftY = WorldHeight/2-BlockSize;
         const bottomLeft = { x: bottomLeftX, y: bottomLeftY };
 
         this.fromChunk = {
             bottomLeft,
-            sideLength: BLOCK_SIZE,
+            sideLength: BlockSize,
             };
         this.nextChunk = this.fromChunk;
   
@@ -125,7 +158,7 @@ export class Game extends Laya.Script {
         this.bg.anchorY = 0.5;
         const total = WidthBlock*HeightBlock;
         for (let index = 0; index < total; index++) {
-            this.CreateMap(BLOCK_SIZE);
+            this.CreateMap(BlockSize,Seed,Denom);
         }
         //Laya.timer.once(5000,this, this.checkPlayerInit);
         //this.checkPlayerInit();
@@ -146,16 +179,17 @@ export class Game extends Laya.Script {
               }  = this.mud;
             const mapConfig = getComponentValue(MapComponent, singletonEntity);
     
-            const {width,height,stepLimit} = mapConfig;
-            const WorldWidth = Number(width)*BLOCK_SIZE;
-            const WorldHeight = Number(height)*BLOCK_SIZE;
+            const {width,height,stepLimit,blockSize} = mapConfig;
+            const BlockSize = Number(blockSize);
+            const WorldWidth = Number(width)*BlockSize;
+            const WorldHeight = Number(height)*BlockSize;
             const StepLimit = Number(stepLimit);
             //创建预制体 
 
             const playerPos = getComponentValue(PositionComponent,entity);
             const state =  getComponentValue(PlayerInfoComponent,entity).state as PlayerStateType;
-            const x = Number(playerPos.x)*BLOCK_SIZE;
-            const y = Number(playerPos.y)*BLOCK_SIZE;
+            const x = Number(playerPos.x)*BlockSize;
+            const y = Number(playerPos.y)*BlockSize;
             let player = res.create();
             player.pos(x,y);
             this.bg.addChild(player);
@@ -220,16 +254,18 @@ export class Game extends Laya.Script {
     onMoveAction(entity:string){
         console.log('onMoveAction---  ');
         const {
-            components:{PositionComponent},
+            components:{PositionComponent,MapComponent,},
             network: { singletonEntity },
           }  = this.mud;
  
         const nextPos = getComponentValue(PositionComponent,entity);
+        const mapInfo = getComponentValue(MapComponent,singletonEntity);
+        const BlockSize = Number(mapInfo.blockSize);
         const x = Number(nextPos.x);
         const y = Number(nextPos.y);
         let movePoint = new Laya.Point(x,y);
-        movePoint.x *= BLOCK_SIZE;
-        movePoint.y *= BLOCK_SIZE;
+        movePoint.x *= BlockSize;
+        movePoint.y *= BlockSize;
         console.log('onMoveAction  ',movePoint.x,movePoint.y);
 
         const player = this.playerImageMap.get(entity);
@@ -248,7 +284,22 @@ export class Game extends Laya.Script {
         }
     }
     async onGainEvent(){
-
+        console.log('----onGainEvent ');
+             const {
+            systemCalls: { gain },
+            components:{PositionComponent,MapComponent},
+            network: { playerEntity,singletonEntity },
+          }  = this.mud;
+          const posInfo = getComponentValue(PositionComponent,playerEntity);
+          const mapInfo = getComponentValue(MapComponent,singletonEntity);
+          const BlockSize = Number(mapInfo.blockSize);
+          let p = perlin(Number(posInfo.x)*BlockSize,Number(posInfo.y)*BlockSize,Number(mapInfo.seed), Number(mapInfo.denom));
+        
+          console.log('onGainEvent   p  ',p);
+        this.popLoading(true);
+        const result = await gain();
+        this.popLoading(false);
+        console.log('---result',result);
     }
     async onExploreEvent(){
         console.log('----onExploreEvent ');
@@ -268,13 +319,14 @@ export class Game extends Laya.Script {
         let script = player.getComponents(Laya.Script)[1] as Hero;
         script.SetBgVisible(false);
         const {
-            components:{MapComponent},
-            network: { singletonEntity },
+            components:{PlayerInfoComponent,MapComponent},
+            network: { playerEntity,singletonEntity },
+            systemCalls: { isObstructed,moveTo },
           }  = this.mud;
         const mapConfig = getComponentValue(MapComponent, singletonEntity);
 
-        const { moveCost, stepLimit} = mapConfig;
-         
+        const { moveCost, stepLimit,blockSize} = mapConfig;
+        const BlockSize = Number(blockSize);
         const StepLimit = Number(stepLimit);
         const MoveCost = Number(moveCost);
         const x = Laya.stage.mouseX;
@@ -282,28 +334,24 @@ export class Game extends Laya.Script {
         let movePoint = new Laya.Point(x,y);
         this.bg.globalToLocal(movePoint,false);
          
-        movePoint.x = Math.floor(movePoint.x/BLOCK_SIZE)*BLOCK_SIZE;
-        movePoint.y = Math.floor(movePoint.y/BLOCK_SIZE)*BLOCK_SIZE;
+        movePoint.x = Math.floor(movePoint.x/BlockSize)*BlockSize;
+        movePoint.y = Math.floor(movePoint.y/BlockSize)*BlockSize;
 
          
 
         
-        const dis = Math.abs(player.x-movePoint.x)/BLOCK_SIZE + Math.abs(player.y-movePoint.y)/BLOCK_SIZE;
+        const dis = Math.abs(player.x-movePoint.x)/BlockSize + Math.abs(player.y-movePoint.y)/BlockSize;
         if(dis > StepLimit){
             this.popMessage("step limit");
            
             return;
         }
-        const {
-            systemCalls: { isObstructed,moveTo },
-            components:{PlayerInfoComponent},
-            network: {playerEntityId },
-          }  = this.mud;
+ 
         if(isObstructed(movePoint.x,movePoint.y)){
             this.popMessage("this space is obstructed");
             return;
         }
-        const playerInfo = getComponentValue(PlayerInfoComponent,playerEntityId);
+        const playerInfo = getComponentValue(PlayerInfoComponent,playerEntity);
         if(playerInfo == undefined){
             return;
         }
@@ -317,7 +365,7 @@ export class Game extends Laya.Script {
         }
          
         this.popLoading(true);
-        const result = await moveTo(movePoint.x/BLOCK_SIZE,movePoint.y/BLOCK_SIZE);
+        const result = await moveTo(movePoint.x/BlockSize,movePoint.y/BlockSize);
         console.log('---result',result);
         this.popLoading(false);
   
@@ -360,14 +408,15 @@ export class Game extends Laya.Script {
         this.bg.startDrag();
  
     }
-    CreateMap(BlockSize:number){
-        const p = perlin(this.nextChunk.bottomLeft.x,this.nextChunk.bottomLeft.y,7240, 1024)*10;
+    CreateMap(blockSize:number,seed:number,denom:number){
+
+        const p = perlin(this.nextChunk.bottomLeft.x,this.nextChunk.bottomLeft.y,seed,denom)*10;
         let terrianType = this.terrianTypeFromPerlin(p);
        
-        this.bg.graphics.drawRect(this.nextChunk.bottomLeft.x,this.nextChunk.bottomLeft.y,BlockSize,BlockSize,this.terrianColorFromType(terrianType),'000000',0);
+        this.bg.graphics.drawRect(this.nextChunk.bottomLeft.x,this.nextChunk.bottomLeft.y,blockSize,blockSize,this.terrianColorFromType(terrianType),'000000',0);
        // this.bg.graphics.drawImage(texture,this.nextChunk.bottomLeft.x+980/2,540/2-this.nextChunk.bottomLeft.y,16,16,this.terrianColorFromType(terrianType));
  
-        this.nextChunk =  this.findNextChunk(this.nextChunk,BlockSize);
+        this.nextChunk =  this.findNextChunk(this.nextChunk,blockSize);
     }
     isValidExploreTarget(chunkLocation: Rectangle): boolean {
         const { bottomLeft, sideLength } = chunkLocation;
@@ -411,37 +460,37 @@ export class Game extends Laya.Script {
         };
     }
     public terrianTypeFromPerlin(perlin: number): TerrianType {
-        if (perlin < TerrianType.Water) {
-            return TerrianType.Water;
-        } else if (perlin < TerrianType.Glass) {
-            return TerrianType.Glass;
-        } else if (perlin < TerrianType.Soil) {
-            return TerrianType.Soil;
-        }else if (perlin < TerrianType.Fire) {
-            return TerrianType.Fire;
-        }else if (perlin < TerrianType.Ice) {
-            return TerrianType.Ice;
+        if (perlin < TerrianType.Grass) {
+            return TerrianType.Grass;
+        } else if (perlin < TerrianType.Forest) {
+            return TerrianType.Forest;
+        } else if (perlin < TerrianType.Mountain) {
+            return TerrianType.Mountain;
+        }else if (perlin < TerrianType.Desert) {
+            return TerrianType.Desert;
+        }else if (perlin < TerrianType.Icefield) {
+            return TerrianType.Icefield;
         }else {
-            return TerrianType.Water;
+            return TerrianType.Grass;
         }
-  }
+  }   
   public terrianColorFromType(type: TerrianType): string {
     let result = "ffffff";
     switch (type) {
-        case TerrianType.Water:
-            result = "3300FF";
+        case TerrianType.Grass:
+            result = "00CC66";
             break;
-        case TerrianType.Glass:
-            result = "00CC00";
+        case TerrianType.Forest:
+            result = "00991A";
             break;
-        case TerrianType.Soil:
-            result = "FF9933";
+        case TerrianType.Desert:
+            result = "FFCC99";
             break;
-        case TerrianType.Fire:
-            result = "FF0000";
+        case TerrianType.Mountain:
+            result = "E07000";
             break;
-        case TerrianType.Ice:
-            result = "CCCCCC";
+        case TerrianType.Icefield:
+            result = "99CCFF";
             break;
         default:
             break;
@@ -450,6 +499,9 @@ export class Game extends Laya.Script {
     }
     popMessage(message:string){
         Laya.Scene.open("resources/prefab/P_Message.lh", false, {"text":message}); 
+    }
+    popGain(attr:string){
+        Laya.Scene.open("resources/prefab/P_Gain.lh", false, {"attr":attr}); 
     }
     popLoading(open:boolean){
         if(open){

@@ -5,6 +5,7 @@ pragma solidity >=0.8.0;
 
 import { TestComponent, TestComponentTableId } from "./tables/TestComponent.sol";
 import { ObstructionComponent, ObstructionComponentTableId } from "./tables/ObstructionComponent.sol";
+import { NFTComponent, NFTComponentTableId } from "./tables/NFTComponent.sol";
 import { PlayerComponent, PlayerComponentTableId } from "./tables/PlayerComponent.sol";
 import { PositionComponent, PositionComponentTableId } from "./tables/PositionComponent.sol";
 import { PlayerInfoComponent, PlayerInfoComponentTableId } from "./tables/PlayerInfoComponent.sol";

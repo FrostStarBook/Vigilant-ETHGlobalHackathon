@@ -16,23 +16,24 @@ export default mudConfig({
       },
     },
     PlayerInfoComponent: {
-      schema: { 
+      dataStruct: false,
+      schema: {
         updateTimestamp:"uint256",
         state:"PlayerStatus",
         energy:"int32",
-        },
+      },
     },
     MapComponent: {
       keySchema: {},
       dataStruct: false,
-      schema: { 
-        width: "int256", 
+      schema: {
+        width: "int256",
         height: "int256",
         seed:"int256",
         denom:"int256",
         precision:"uint256",
         stepLimit:'uint256',
-       },
+      },
     },
   },
   modules: [

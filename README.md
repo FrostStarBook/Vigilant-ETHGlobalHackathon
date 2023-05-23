@@ -45,7 +45,7 @@ In essence, Vigilant is a captivating on-chain world built around rune NFTs, off
 - Back-end: We use Solidity for smart contract development, which is a popular and universal language suitable for Ethereum-based applications. For the issuance testing of NFTs, we use the powerful Remix development environment to compile, deploy, and test our contracts, ensuring their reliability and security. For game content development, we develop under the mud std-contract framework. With the foundry development environment, we can easily set up a local testing environment and debug code.
 
 
-- Deployment: Our smart contracts are deployed on OP Stack, using the advantages of L2 to increase the speed of our contracts and reduce our gas fees. We also use NFT.storage (Filecoin, IPFS) to store our basic NFT metadata information and integrate the MUD framework to facilitate seamless interaction between our game and smart contracts.
+- Deployment: Our smart contracts are deployed on goerli-optimism, using the advantages of L2 to increase the speed of our contracts and reduce our gas fees. We also use NFT.storage (Filecoin, IPFS) to store our basic NFT metadata information and integrate the MUD framework to facilitate seamless interaction between our game and smart contracts.
 
 
 - Unipass: We plan to integrate the account abstraction functionality of the Unipass SDK into our game, enabling users to log in easily with their email instead of the conventional wallet address. We believe that the latest account abstraction technology can provide a better experience for users.

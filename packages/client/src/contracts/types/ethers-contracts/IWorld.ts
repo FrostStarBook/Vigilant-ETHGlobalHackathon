@@ -31,7 +31,7 @@ import type {
 export interface IWorldInterface extends utils.Interface {
   functions: {
     "Explore()": FunctionFragment;
-    "GetExploreResult()": FunctionFragment;
+    "Gain()": FunctionFragment;
     "JoinGame(int256,int256)": FunctionFragment;
     "Move(int256,int256)": FunctionFragment;
     "call(bytes16,bytes16,bytes)": FunctionFragment;
@@ -78,7 +78,7 @@ export interface IWorldInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "Explore"
-      | "GetExploreResult"
+      | "Gain"
       | "JoinGame"
       | "Move"
       | "call"
@@ -123,10 +123,7 @@ export interface IWorldInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "Explore", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "GetExploreResult",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "Gain", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "JoinGame",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
@@ -435,10 +432,7 @@ export interface IWorldInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "Explore", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "GetExploreResult",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "Gain", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "JoinGame", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "Move", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "call", data: BytesLike): Result;
@@ -687,7 +681,7 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    GetExploreResult(
+    Gain(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -990,7 +984,7 @@ export interface IWorld extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  GetExploreResult(
+  Gain(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1291,7 +1285,7 @@ export interface IWorld extends BaseContract {
   callStatic: {
     Explore(overrides?: CallOverrides): Promise<void>;
 
-    GetExploreResult(overrides?: CallOverrides): Promise<void>;
+    Gain(overrides?: CallOverrides): Promise<void>;
 
     JoinGame(
       x: PromiseOrValue<BigNumberish>,
@@ -1639,7 +1633,7 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    GetExploreResult(
+    Gain(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1943,7 +1937,7 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    GetExploreResult(
+    Gain(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

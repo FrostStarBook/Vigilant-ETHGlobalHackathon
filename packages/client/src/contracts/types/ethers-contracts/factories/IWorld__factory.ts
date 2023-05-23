@@ -305,7 +305,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "GetExploreResult",
+    name: "Gain",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

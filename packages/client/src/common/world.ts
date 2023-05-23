@@ -9,11 +9,11 @@ export interface Rectangle {
 }
 
 export enum TerrianType{
-    Ice = 3,
-    Water,
-    Glass,
-    Soil,
-    Fire,
+    Grass = 3,
+    Forest,
+    Mountain,
+    Desert,
+    Icefield,
 }
 
 export enum HeroDir{
@@ -30,7 +30,5 @@ export enum PlayerActionEvent{
     Explore = 'Explore',
     Gain = 'Gain',
 }
-
-export const BLOCK_SIZE = 64;
 
   

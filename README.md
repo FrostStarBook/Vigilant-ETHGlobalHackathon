@@ -3,8 +3,9 @@
 
 Vigilant is an on-chain world defined by runes, not just a game. Adventurers collect rune NFTs to craft game rules. We've created a card game to highlight runes' charm. Collect five runes to form battle cards and conquer in Vigilant's games.
 
-Project demonstration：
+Project demonstration（ Winning NFT.Storage 2nd place ）：
 https://ethglobal.com/showcase/vigilant-w3hcq
+
 
 ## Project Description 
 
